@@ -54,7 +54,7 @@ func main() {
 		fmt.Println("[PING] started")
 
 		// start interaction
-		fmt.Println("[PING] Ping message to Pong")
+		fmt.Println("[PING] initialize conversation signal to Pong")
 		pingSigCh<- struct{command string}{command: "start",}
 
 		// reading messages and control sygnal from multiple channels
@@ -69,14 +69,14 @@ func main() {
 					pingSigCh<- struct{command string}{command: "stop"}
 					stop = true;
 				default:
-					fmt.Println("[PING] Pong singnal ->", signal)
+					fmt.Println("[PING] Pong singnal:", signal)
 				}
 			case message := <-pongMsgCh: // process messages
 				switch message {
 				default:
-					fmt.Println("[PING] Pong message ->", message.text)
+					fmt.Println("[PING] Pong message:", message.text)
 					// reply
-					pingMsgCh<- struct{text string}{text: "Hello, Pong",}
+					pingMsgCh<- struct{text string}{text: "Hello, Pong!",}
 				}
 			case <-time.After(APP_TIMEOUT * time.Microsecond): // safety timeout
 				fmt.Println("[PING] Pong response timeout")
@@ -112,14 +112,13 @@ func main() {
 					// send first message
 					pongMsgCh<- struct{text	string}{text: "Hello, Ping"}
 				default:
-					fmt.Println("[PONG] Pong singnal ->", signal.command)
+					fmt.Println("[PONG] Ping singnal:", signal.command)
 				}
 			case message := <-pingMsgCh: // process message
 				switch message {
 				default:
-					fmt.Println("[PONG] Pong message ->", message.text)
-					// Reply
-					//pingMsgCh<- struct{text	string}{text: "Hello, Ping"}
+					fmt.Println("[PONG] Ping message:", message.text)
+					fmt.Println("[PONG] terminate conversation signal to Ping")
 					pongSigCh<- struct{command string}{command: "stop"}
 				}
 			case <-time.After(RESPONSE_TIMEOUT * time.Microsecond): // safety timeout
@@ -130,7 +129,7 @@ func main() {
 	}()
 
 
-	// group lider
+	// group leader
 	go func() {
 		// robust system)
 		defer func() {
