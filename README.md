@@ -1,7 +1,7 @@
 # ping-pong
 Supervised classical ping-pong using goroutines
 
-You shold see this output in the console when program done
+You should see this output in the console when program done
 
 <code>go run ping_pong.go</code>
 ```
